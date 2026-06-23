@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+
+
+# Environment variables
+.env
+
+
+git remote add origin https://github.com/yash0839/recipe-project.git
+git branch -M main
+git push -u origin main

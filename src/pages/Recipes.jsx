@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import {recipecontext} from "../context/RecipeContext"
+import RecipeCard from '../componentes/RecipeCard'
 
 const Recipes = () => {
 
@@ -7,15 +8,16 @@ const Recipes = () => {
 
 
   const  renderrecipe = data.map(recipe => (
-      <div key={recipe.id}>
-        <h1>{recipe.title}</h1>
-      </div>
+      <RecipeCard key={recipe.id} recipe={recipe} />
     )
   )
 
 
   return (
-    <div>renderrecipe</div>
+    <div className="flex flex-wrap gap-6 ">
+      {/* {data.lenght > 0 ? renderrecipe: "No recipes found"} */}
+      {renderrecipe}
+    </div>
   )
 }
 

@@ -1,28 +1,62 @@
 import React, { useContext } from 'react'
-import { nanoid } from 'nanoid'
-import { useForm } from 'react-hook-form'  
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { recipecontext } from '../context/RecipeContext'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-const Create = () => {
-
-   const navigate = useNavigate()
+const SingleRecipe = () => {
    const {data, setdata} = useContext(recipecontext)
-   const {register, handleSubmit, reset} = useForm()
+   const params = useParams()
+   const recipe = data.find(recipe => params.id == recipe.id)      
+   const navigate = useNavigate()
+
+   const {register, handleSubmit, reset} = useForm({
+    dafaultValues:{
+           title: recipe.title,
+           chef: recipe.chef,
+           image: recipe.image,
+           inst: recipe.inst,
+           desc: recipe.desc,
+           ingr: recipe.ingr,
+   }})
+
    const submitHandler= (recipe )=>{
-         recipe.id = nanoid();
+  
+       const index = data.findIndex((recipe)=> params.id == recipe.id)
+       const copyrecipe = [...data]
+       copydata[index]= {...copydata[index], ...recipe}
+
             // const copydata={...data}
             // copydata.push(recipe)
-            // setdata(copydata)
-         setdata([...data, recipe])
-         toast.success("New recipe created!")
-            reset()
-            navigate("/recipes")
-        }
+       setdata(copydata)
+       toast.success("Recipe updated!")
+   }
+        
+ 
 
-  return (
-    <form onSubmit={handleSubmit(submitHandler)}>
+  const DeleteHandler = ()=>{
+    const filterdata = data.filter(r => r.id != params.id)
+    setdata(filterdata)
+    toast.success("recipe delete!")
+    navigate("/recipes")
+  }
+
+
+
+
+  return recipe ? 
+  <div className='w-full flex '>
+    <div className="left w-1/2 p-2">
+      <h1 className='text-5xl font-black'>{recipe.title}</h1>
+      <img className='h-[20vh] '  src={recipe.image} alt="" />
+      <h1>{recipe.chef}</h1>
+      <p>{recipe.desc} </p>
+    </div>
+
+
+    <div className="right w-1/2 p-2">
+
+        <form className='w-1/2 p-2 ' onSubmit={handleSubmit(submitHandler)}>
         <input 
         className="border-b outline-0 p-2 block"
          {...register('image')} 
@@ -54,7 +88,7 @@ const Create = () => {
 
          <textarea 
         className="border-b outline-0 p-2 block"
-         {...register('desc')} 
+         {...register('desc')}
           placeholder="start from here"
           ></textarea>
 
@@ -95,12 +129,19 @@ const Create = () => {
           
           </select>
 
-         <button className="mt-5 block bg-gray-900 px-4 py-2 rounded ">
-            Save Recipe
+         <button className="mt-5 block bg-blue-900 px-4 py-2 rounded ">
+            Update Recipe
+         </button>
+         <button onClick={DeleteHandler} className='mt-5 block bg-red-900 px-4 py-2 rounded'>
+            Delete Recipe
          </button>
     </form>
 
-  )
-}
 
-export default Create
+    </div>
+    
+
+  </div> : "Loading..."
+  }
+
+export default SingleRecipe

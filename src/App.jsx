@@ -2,11 +2,14 @@ import React from 'react'
 import Mainroutes from './routes/Mainroutes'
 import Navbar from './componentes/Navbar'
 
+
 const App = () => {
   return (
-    <div className='w-screen h-screen py-10 px-[10%] text-white font-thin bg-gray-800 '>
+    <div className='min-h-screen py-8 px-4 md:px-[10%] text-white bg-gray-800'>
       <Navbar />
-      <Mainroutes />
+      <main className="mt-8">
+        <Mainroutes />
+      </main>
     </div>
   )
 }

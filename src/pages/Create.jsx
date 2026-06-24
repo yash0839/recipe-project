@@ -1,105 +1,90 @@
 import React, { useContext } from 'react'
 import { nanoid } from 'nanoid'
-import { useForm } from 'react-hook-form'  
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { recipecontext } from '../context/RecipeContext'
 import { toast } from 'react-toastify'
 
 const Create = () => {
+  const navigate = useNavigate()
+  const { data, setdata } = useContext(recipecontext)
+  const { register, handleSubmit, reset } = useForm()
 
-   const navigate = useNavigate()
-   const {data, setdata} = useContext(recipecontext)
-   const {register, handleSubmit, reset} = useForm()
-   const submitHandler= (recipe )=>{
-         recipe.id = nanoid();
-            // const copydata={...data}
-            // copydata.push(recipe)
-            // setdata(copydata)
-         setdata([...data, recipe])
-         toast.success("New recipe created!")
-            reset()
-            navigate("/recipes")
-        }
+  const submitHandler = (recipe) => {
+    recipe.id = nanoid()
+    const copyData = [...data]
+    copyData.push(recipe)
+    setdata(copyData)
+    localStorage.setItem("recipes", JSON.stringify(copyData))
+    toast.success("New recipe created!")
+    reset()
+    navigate("/recipes")
+  }
 
   return (
-    <form onSubmit={handleSubmit(submitHandler)}>
-        <input 
-        className="border-b outline-0 p-2 block"
-         {...register('image')} 
-         type="url" 
-         placeholder="Enter Image Url "
-          />
-          
-          <small className="text-red-400 ">
-            this is how the erroe well be show
-         </small>
+    <form onSubmit={handleSubmit(submitHandler)} className="max-w-md mx-auto space-y-3">
+      <input 
+        className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+        {...register('image')} 
+        type="url" 
+        placeholder="Image URL"
+        required
+      />
+      
+      <input 
+        className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+        {...register('title')} 
+        type="text" 
+        placeholder="Recipe Title"
+        required
+      />
 
-          <input 
-        className="border-b outline-0 p-2 block"
-         {...register('title')} 
-         type="text" placeholder="Recioe Title"
-          />
+      <input 
+        className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+        {...register('chef')} 
+        type="text" 
+        placeholder="Chef Name"
+        required
+      />
 
-         {/* <small className="text-red-400 ">
-            this is how the erroe well be show
-         </small>   */}
+      <textarea 
+        className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+        {...register('desc')} 
+        placeholder="Description"
+        rows="2"
+        required
+      />
 
-          <input 
-        className="border-b outline-0 p-2 block"
-         {...register('ched')} 
-         type="chef" placeholder="Chef Name"
-          />
+      <textarea 
+        className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+        {...register('ingr')} 
+        placeholder="Ingredients (separated by comma)"
+        rows="2"
+        required
+      />
 
+      <textarea 
+        className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+        {...register('inst')} 
+        placeholder="Instructions (separated by comma)"
+        rows="2"
+        required
+      />
 
+      <select 
+        className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-blue-500"
+        {...register('category')}
+      >
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="supper">Supper</option>
+        <option value="dinner">Dinner</option>
+      </select>
 
-         <textarea 
-        className="border-b outline-0 p-2 block"
-         {...register('desc')} 
-          placeholder="start from here"
-          ></textarea>
-
-         {/* <small className="text-red-400 ">
-            this is how the erroe well be show
-         </small>   */}
-
-          <textarea 
-        className="border-b outline-0 p-2 block"
-         {...register('ingr')} 
-          placeholder="write ingredients seperated by comma"
-          ></textarea>
-
-         {/* <small className="text-red-400 ">
-            this is how the erroe well be show
-         </small>  */}
-
-
-         <textarea 
-        className="border-b outline-0 p-2 block"
-         {...register('inst ')} 
-          placeholder="write instruction  seperated by comma"
-          ></textarea>
-
-         {/* <small className="text-red-400 ">
-            this is how the erroe well be show
-         </small>  */}
-
-
-          <select 
-        className="block border-b outline-0 p-2 "
-         {...register('catrgoey')} 
-          >
-            <option value="breakfast">Breakfast</option>
-            <option value="lunch">Lunch</option>
-            <option value="supper">Supper </option>
-            <option value="dinner">Dinner</option>
-          
-          </select>
-
-         <button className="mt-5 block bg-gray-900 px-4 py-2 rounded ">
-            Save Recipe
-         </button>
+      <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded transition">
+        Save Recipe
+      </button>
     </form>
-
   )
 }
 
